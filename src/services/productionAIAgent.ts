@@ -331,7 +331,7 @@ export class ProductionAIAgent {
   /**
    * Generate viral markets with trending topics
    */
-  private async generateViralMarkets(aiGenerator: AIMarketGenerator, count: number): Promise<AIGeneratedMarket[]> {
+  private async generateViralMarkets(_aiGenerator: AIMarketGenerator, count: number): Promise<AIGeneratedMarket[]> {
     const trendingTopics = await this.fetchTrendingTopics();
     const currentEvents = await this.fetchCurrentEvents();
     
