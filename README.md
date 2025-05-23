@@ -21,13 +21,9 @@ ORBIT revolutionizes prediction markets by combining **TikTok-style swipe mechan
 - **🌐 Multi-Platform**: Web app + Telegram Mini App
 - **💎 Real Money**: Bet and win in SUI cryptocurrency
 
-## 🎥 Demo Video
+# 🎥 Demo Video
 
 [![ORBIT Demo](https://img.youtube.com/vi/okzb89taO-k/maxresdefault.jpg)](https://youtu.be/okzb89taO-k)
-
-## 🎥 Detailed Pitch Video
-
-[![ORBIT Detailed Pitch](https://img.youtube.com/vi/BYsxLJ_IFcQ/maxresdefault.jpg)](https://youtu.be/BYsxLJ_IFcQ)
 
 *Click to watch the full videos*
 
@@ -38,6 +34,11 @@ ORBIT revolutionizes prediction markets by combining **TikTok-style swipe mechan
 | 🌐 **Web App** | [orbit-sui.vercel.app](https://orbit-sui.vercel.app/) | Full featured dApp |
 | 📱 **Telegram Bot** | [t.me/OrbitPredicta_bot](https://t.me/OrbitPredicta_bot) | Mini app version |
 | 📊 **SUI Explorer** | [View Contract](https://testnet.suivision.xyz/package/0x094249483447f27f10b2127fbca067565aef583050c9e5bafe275911389aa3b7) | Smart contract on testnet |
+
+## 🎥 Detailed Pitch Video
+
+[![ORBIT Detailed Pitch](https://img.youtube.com/vi/BYsxLJ_IFcQ/maxresdefault.jpg)](https://youtu.be/BYsxLJ_IFcQ)
+
 
 ## 🛠️ Technology Stack
 
