@@ -37,7 +37,7 @@ ORBIT revolutionizes prediction markets by combining **TikTok-style swipe mechan
 
 ## 🎥 Detailed Pitch Video
 
-[![ORBIT Detailed Pitch](https://img.youtube.com/vi/BYsxLJ_IFcQ/maxresdefault.jpg)](https://youtu.be/BYsxLJ_IFcQ)
+[![ORBIT Detailed Pitch](https://img.youtube.com/vi/BYsxLJ_IFcQ/0.jpg)](https://youtu.be/BYsxLJ_IFcQ)
 
 
 ## 🛠️ Technology Stack
