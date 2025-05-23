@@ -1,10 +1,10 @@
 // src/services/blockchainAIAgent.ts
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { SuiClient } from '@mysten/sui/client';
+
 import { Transaction } from '@mysten/sui/transactions';
 import { fromBase64 } from '@mysten/sui/utils';
 import { AIMarketGenerator } from '@/lib/aiMarketGenerator';
-import { createMarketTx, suiClient, PACKAGE_ID, MARKET_CAP_ID } from '@/lib/suiClient';
+import {  suiClient, PACKAGE_ID, MARKET_CAP_ID } from '@/lib/suiClient';
 import type { AIGeneratedMarket, Market } from '@/types/market';
 
 interface AgentMetrics {
@@ -404,7 +404,7 @@ export class BlockchainAIAgent {
   /**
    * Generate viral markets with AI
    */
-  private async generateViralMarkets(aiGenerator: AIMarketGenerator, count: number): Promise<AIGeneratedMarket[]> {
+  private async generateViralMarkets(_aiGenerator: AIMarketGenerator, count: number): Promise<AIGeneratedMarket[]> {
     const trendingTopics = await this.fetchTrendingTopics();
     const currentEvents = await this.fetchCurrentEvents();
     const prompt = this.createViralPrompt(count, trendingTopics, currentEvents);

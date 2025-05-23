@@ -131,7 +131,7 @@ export const WalletConnect: React.FC = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/30 space-y-4">
               <h3 className="font-semibold text-gray-800 mb-3">Connect SUI Wallet</h3>
               
-              {suiWallets.map((wallet, index) => (
+              {suiWallets.map((wallet, _index) => (
                 <Button
                   key={wallet.name}
                   onClick={() => handleConnectWallet(wallet)}
