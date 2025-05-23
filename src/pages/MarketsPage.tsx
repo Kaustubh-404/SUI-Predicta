@@ -34,7 +34,6 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
   const categories = ["All", "Crypto", "Sports", "Entertainment", "Technology", "Politics", "Memes"]
   const blockchainAgent = BlockchainAIAgent.getInstance()
 
-  // Deduplication function
   const deduplicateMarkets = useCallback((markets: Market[]): Market[] => {
     const seen = new Set<string>();
     return markets.filter(market => {
@@ -47,7 +46,6 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
   }, []);
 
   useEffect(() => {
-    // Deduplicate incoming markets from props
     setMarkets(deduplicateMarkets(propMarkets))
     setLoading(propLoading)
   }, [propMarkets, propLoading, deduplicateMarkets])
@@ -58,7 +56,6 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
     }
   }, [account])
 
-  // Listen for blockchain markets
   useEffect(() => {
     const handleBlockchainMarkets = (event: CustomEvent) => {
       const { markets: newMarkets } = event.detail
@@ -88,7 +85,6 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
         return
       }
 
-      // Load markets from blockchain events
       const marketEvents = await suiClient.queryEvents({
         query: {
           MoveEventType: `${PACKAGE_ID}::market::MarketCreated`,
@@ -165,7 +161,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
     try {
       setBettingMarketId(market.id)
-      const betAmount = "0.01" // Default bet amount
+      const betAmount = "0.01"
       const optionName = option === 0 ? market.optionA : market.optionB
 
       toast({
@@ -252,24 +248,24 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
     })
 
   const getMarketStatus = (market: Market) => {
-    if (market.status === 1) return { text: "Resolved", color: "text-emerald-400", bg: "bg-emerald-500/10" }
-    if (market.status === 2) return { text: "Cancelled", color: "text-rose-400", bg: "bg-rose-500/10" }
-    if (Date.now() > market.expiresAt) return { text: "Expired", color: "text-amber-400", bg: "bg-amber-500/10" }
-    return { text: "Active", color: "text-indigo-400", bg: "bg-indigo-500/10" }
+    if (market.status === 1) return { text: "Resolved", color: "text-[#99ff88]", bg: "bg-[#99ff88]" }
+    if (market.status === 2) return { text: "Cancelled", color: "text-[#ff6961]", bg: "bg-[#ff6961]" }
+    if (Date.now() > market.expiresAt) return { text: "Expired", color: "text-[#d3aeff]", bg: "bg-[#d3aeff]" }
+    return { text: "Active", color: "text-[#99ff88]", bg: "bg-[#99ff88]" }
   }
 
   if (loading) {
     return (
       <>
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+          <div className="absolute inset-0 bg-[#efe7f7]" />
         </div>
         
         <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
           <div className="space-y-6">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-slate-800/60 rounded-3xl h-40 mb-4"></div>
+                <div className="bg-white rounded-3xl h-40 mb-4 border-4 border-black"></div>
               </div>
             ))}
           </div>
@@ -280,14 +276,10 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
   return (
     <>
-      {/* Enhanced Background */}
+      {/* Orbit-style Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+        <div className="absolute inset-0 bg-[#efe7f7]" />
         
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/20 via-transparent to-indigo-500/20 animate-pulse" />
-        </div>
-
         {/* Floating market-related icons */}
         {["📊", "📈", "💹", "🎯", "💰", "⚡"].map((emoji, i) => (
           <motion.div
@@ -315,49 +307,55 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-          {/* Enhanced Header */}
+          {/* Header with Orbit styling */}
           <div className="text-center">
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent mb-4"
+              className="text-4xl font-black text-black mb-4"
+              style={{ fontFamily: 'Brice Black, sans-serif' }}
             >
               Prediction Markets
             </motion.h1>
-            <p className="text-slate-400 text-lg mb-6">Browse and bet on viral prediction markets powered by AI</p>
+            <p className="text-black text-lg mb-6 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Browse and bet on viral prediction markets powered by AI
+            </p>
 
             {/* AI Generate Button */}
             <Button
               onClick={generateAIMarkets}
-              className="bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 mb-8 text-white rounded-2xl border border-violet-400"
+              className="bg-[#99ff88] hover:bg-[#77dd66] mb-8 text-black rounded-2xl border-4 border-black font-black transform hover:-translate-y-1 transition-all"
+              style={{ fontFamily: 'Brice Black, sans-serif' }}
             >
               <Bot className="w-4 h-4 mr-2" />
               Generate AI Markets on Blockchain
             </Button>
           </div>
 
-          {/* Enhanced Filters */}
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-3xl p-6 border border-slate-700">
+          {/* Filters with Orbit design */}
+          <div className="bg-white rounded-3xl p-6 border-4 border-black shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black/60 w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search markets..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-2xl focus:ring-2 focus:ring-violet-500 focus:border-transparent text-white placeholder-slate-400"
+                  className="w-full pl-10 pr-4 py-3 bg-[#efe7f7] border-2 border-black rounded-2xl focus:ring-2 focus:ring-[#d3aeff] focus:border-[#d3aeff] text-black placeholder-black/60 font-medium"
+                  style={{ fontFamily: 'Brice Regular, sans-serif' }}
                 />
               </div>
 
               {/* Category Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black/60 w-5 h-5" />
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white appearance-none"
+                  className="w-full pl-10 pr-4 py-3 bg-[#efe7f7] border-2 border-black rounded-2xl focus:ring-2 focus:ring-[#d3aeff] focus:border-[#d3aeff] text-black appearance-none font-medium"
+                  style={{ fontFamily: 'Brice Regular, sans-serif' }}
                 >
                   {categories.map((category) => (
                     <option key={category} value={category}>
@@ -369,11 +367,12 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
               {/* Sort */}
               <div className="relative">
-                <TrendingUp className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <TrendingUp className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black/60 w-5 h-5" />
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-2xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white appearance-none"
+                  className="w-full pl-10 pr-4 py-3 bg-[#efe7f7] border-2 border-black rounded-2xl focus:ring-2 focus:ring-[#d3aeff] focus:border-[#d3aeff] text-black appearance-none font-medium"
+                  style={{ fontFamily: 'Brice Regular, sans-serif' }}
                 >
                   <option value="newest">Newest</option>
                   <option value="popular">Most Popular</option>
@@ -385,35 +384,45 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
           {/* Markets Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 text-center">
-              <Activity className="w-5 h-5 text-indigo-400 mx-auto mb-1" />
-              <div className="text-2xl font-bold text-indigo-400">{filteredMarkets.length}</div>
-              <div className="text-sm text-slate-400">Total Markets</div>
+            <div className="bg-white rounded-2xl p-4 border-4 border-black text-center shadow-lg">
+              <Activity className="w-5 h-5 text-[#d3aeff] mx-auto mb-1" />
+              <div className="text-2xl font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {filteredMarkets.length}
+              </div>
+              <div className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Total Markets
+              </div>
             </div>
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 text-center">
-              <Zap className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-              <div className="text-2xl font-bold text-emerald-400">
+            <div className="bg-white rounded-2xl p-4 border-4 border-black text-center shadow-lg">
+              <Zap className="w-5 h-5 text-[#99ff88] mx-auto mb-1" />
+              <div className="text-2xl font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {filteredMarkets.filter((m) => m.status === 0).length}
               </div>
-              <div className="text-sm text-slate-400">Active</div>
+              <div className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Active
+              </div>
             </div>
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 text-center">
-              <Target className="w-5 h-5 text-violet-400 mx-auto mb-1" />
-              <div className="text-2xl font-bold text-violet-400">
+            <div className="bg-white rounded-2xl p-4 border-4 border-black text-center shadow-lg">
+              <Target className="w-5 h-5 text-[#ff6961] mx-auto mb-1" />
+              <div className="text-2xl font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {formatSUI(filteredMarkets.reduce((sum, m) => sum + m.totalPool, 0))}
               </div>
-              <div className="text-sm text-slate-400">Total Pool</div>
+              <div className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Total Pool
+              </div>
             </div>
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 text-center">
-              <Sparkles className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-              <div className="text-2xl font-bold text-amber-400">
+            <div className="bg-white rounded-2xl p-4 border-4 border-black text-center shadow-lg">
+              <Sparkles className="w-5 h-5 text-[#d3aeff] mx-auto mb-1" />
+              <div className="text-2xl font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {filteredMarkets.filter((m) => m.id.startsWith("ai_")).length}
               </div>
-              <div className="text-sm text-slate-400">AI Generated</div>
+              <div className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                AI Generated
+              </div>
             </div>
           </div>
 
-          {/* Enhanced Markets Grid */}
+          {/* Markets Grid with Orbit design */}
           <AnimatePresence>
             {filteredMarkets.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -432,7 +441,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-slate-800/60 backdrop-blur-sm rounded-3xl p-8 border border-slate-700 hover:border-violet-500/50 transition-all duration-500 group hover:shadow-2xl hover:shadow-violet-500/10"
+                      className="bg-white rounded-3xl p-8 border-4 border-black hover:border-[#d3aeff] transition-all duration-500 group hover:shadow-2xl hover:-translate-y-2"
                     >
                       <div className="space-y-6">
                         {/* Market Header */}
@@ -440,54 +449,61 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-3">
                               {isAIGenerated && (
-                                <div className="bg-gradient-to-r from-violet-500 to-indigo-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
+                                <div className="bg-[#d3aeff] text-black px-3 py-1 rounded-2xl text-xs font-black flex items-center border-2 border-black">
                                   <Sparkles className="w-3 h-3 mr-1" />
                                   AI Generated
                                 </div>
                               )}
                               {market.category && (
-                                <span className="bg-slate-700/50 text-slate-300 px-3 py-1 rounded-full text-xs font-medium border border-slate-600">
+                                <span className="bg-[#efe7f7] text-black px-3 py-1 rounded-2xl text-xs font-black border-2 border-black">
                                   {market.category}
                                 </span>
                               )}
-                              <div className={`${status.bg} ${status.color} px-3 py-1 rounded-full text-xs font-medium border border-current/30`}>
+                              <div className={`${status.bg} text-black px-3 py-1 rounded-2xl text-xs font-black border-2 border-black`}>
                                 {status.text}
                               </div>
                             </div>
 
-                            <h3 className="font-bold text-xl mb-3 text-white group-hover:text-violet-300 transition-colors">
+                            <h3 className="font-black text-xl mb-3 text-black group-hover:text-[#d3aeff] transition-colors" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                               {market.question}
                             </h3>
 
                             {isActive && (
-                              <div className="flex items-center gap-2 text-sm text-slate-400">
+                              <div className="flex items-center gap-2 text-sm text-black/60">
                                 <Clock className="w-4 h-4" />
-                                <span>{formatTimeRemaining(market.expiresAt)} remaining</span>
+                                <span className="font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                                  {formatTimeRemaining(market.expiresAt)} remaining
+                                </span>
                               </div>
                             )}
                           </div>
                         </div>
 
-                        {/* Enhanced Options */}
+                        {/* Options with Orbit design */}
                         <div className="space-y-4">
                           <motion.div
                             whileHover={{ scale: 1.02 }}
-                            className="flex items-center justify-between p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/30 hover:border-emerald-400/50 transition-all"
+                            className="flex items-center justify-between p-4 bg-[#99ff88] rounded-2xl border-4 border-black hover:border-[#77dd66] transition-all shadow-lg"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
-                                <Check className="w-6 h-6 text-white" />
+                              <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+                                <Check className="w-6 h-6 text-[#99ff88]" />
                               </div>
-                              <span className="font-semibold text-emerald-300">{market.optionA}</span>
+                              <span className="font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                                {market.optionA}
+                              </span>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="text-emerald-400 font-bold text-lg">{oddsA}%</span>
+                              <span className="text-black font-black text-lg" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                                {oddsA}%
+                              </span>
                               {isActive && (
                                 <Button
                                   size="sm"
                                   onClick={() => handleQuickBet(market, 0)}
                                   disabled={isBetting}
-                                  className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
+                                  className="bg-black hover:bg-black/80 text-[#99ff88] rounded-xl font-black border-2 border-black"
+                                  style={{ fontFamily: 'Brice Black, sans-serif' }}
                                 >
                                   {isBetting ? "Betting..." : "Bet"}
                                 </Button>
@@ -497,22 +513,27 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
 
                           <motion.div
                             whileHover={{ scale: 1.02 }}
-                            className="flex items-center justify-between p-4 bg-rose-500/10 rounded-2xl border border-rose-500/30 hover:border-rose-400/50 transition-all"
+                            className="flex items-center justify-between p-4 bg-[#ff6961] rounded-2xl border-4 border-black hover:border-[#dd4444] transition-all shadow-lg"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center">
-                                <X className="w-6 h-6 text-white" />
+                              <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+                                <X className="w-6 h-6 text-[#ff6961]" />
                               </div>
-                              <span className="font-semibold text-rose-300">{market.optionB}</span>
+                              <span className="font-black text-white" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                                {market.optionB}
+                              </span>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="text-rose-400 font-bold text-lg">{oddsB}%</span>
+                              <span className="text-white font-black text-lg" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                                {oddsB}%
+                              </span>
                               {isActive && (
                                 <Button
                                   size="sm"
                                   onClick={() => handleQuickBet(market, 1)}
                                   disabled={isBetting}
-                                  className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
+                                  className="bg-black hover:bg-black/80 text-[#ff6961] rounded-xl font-black border-2 border-black"
+                                  style={{ fontFamily: 'Brice Black, sans-serif' }}
                                 >
                                   {isBetting ? "Betting..." : "Bet"}
                                 </Button>
@@ -521,35 +542,39 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
                           </motion.div>
                         </div>
 
-                        {/* Enhanced Progress Bar */}
+                        {/* Progress Bar */}
                         <div className="space-y-3">
-                          <Progress value={oddsA} className="h-3 bg-slate-700 rounded-full overflow-hidden">
+                          <Progress value={oddsA} className="h-3 bg-[#efe7f7] rounded-full overflow-hidden border-2 border-black">
                             <div
-                              className="h-full bg-gradient-to-r from-emerald-500 to-indigo-500 transition-all duration-500"
+                              className="h-full bg-gradient-to-r from-[#99ff88] to-[#77dd66] transition-all duration-500"
                               style={{ width: `${oddsA}%` }}
                             />
                           </Progress>
-                          <div className="flex justify-between text-sm font-medium">
-                            <span className="text-emerald-400">{formatSUI(market.optionAPool)} SUI</span>
-                            <span className="text-slate-400">{formatSUI(market.totalPool)} SUI total</span>
-                            <span className="text-rose-400">{formatSUI(market.optionBPool)} SUI</span>
+                          <div className="flex justify-between text-sm font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                            <span className="text-[#99ff88]">{formatSUI(market.optionAPool)} SUI</span>
+                            <span className="text-black/60">{formatSUI(market.totalPool)} SUI total</span>
+                            <span className="text-[#ff6961]">{formatSUI(market.optionBPool)} SUI</span>
                           </div>
                         </div>
 
                         {/* Market Stats */}
-                        <div className="flex justify-between items-center pt-4 border-t border-slate-700">
-                          <div className="flex items-center gap-4 text-sm text-slate-400">
+                        <div className="flex justify-between items-center pt-4 border-t-2 border-black">
+                          <div className="flex items-center gap-4 text-sm text-black/60">
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-4 h-4" />
-                              <span>Pool: {formatSUI(market.totalPool)} SUI</span>
+                              <span className="font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                                Pool: {formatSUI(market.totalPool)} SUI
+                              </span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Users className="w-4 h-4" />
-                              <span>Active</span>
+                              <span className="font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                                Active
+                              </span>
                             </div>
                           </div>
                           {market.status === 1 && (
-                            <div className="text-sm text-emerald-400 font-medium">
+                            <div className="text-sm text-[#99ff88] font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                               Winner: {market.outcome === 0 ? market.optionA : market.optionB}
                             </div>
                           )}
@@ -561,32 +586,38 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
               </div>
             ) : (
               <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20">
-                <div className="text-8xl mb-6">🔍</div>
-                <h3 className="text-2xl font-bold mb-4 text-white">No Markets Found</h3>
-                <p className="text-slate-400 mb-8 text-lg">
-                  {searchQuery || selectedCategory !== "All"
-                    ? "Try adjusting your filters to see more markets"
-                    : "Be the first to create a prediction market!"}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  {(searchQuery || selectedCategory !== "All") && (
+                <div className="bg-white rounded-3xl border-4 border-black p-12 shadow-xl">
+                  <div className="text-8xl mb-6">🔍</div>
+                  <h3 className="text-2xl font-black mb-4 text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                    No Markets Found
+                  </h3>
+                  <p className="text-black/80 mb-8 text-lg font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                    {searchQuery || selectedCategory !== "All"
+                      ? "Try adjusting your filters to see more markets"
+                      : "Be the first to create a prediction market!"}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    {(searchQuery || selectedCategory !== "All") && (
+                      <Button
+                        onClick={() => {
+                          setSearchQuery("")
+                          setSelectedCategory("All")
+                        }}
+                        variant="outline"
+                        className="rounded-2xl border-4 border-black bg-white hover:bg-[#efe7f7] text-black font-black"
+                        style={{ fontFamily: 'Brice Black, sans-serif' }}
+                      >
+                        Clear Filters
+                      </Button>
+                    )}
                     <Button
-                      onClick={() => {
-                        setSearchQuery("")
-                        setSelectedCategory("All")
-                      }}
-                      variant="outline"
-                      className="rounded-2xl border border-slate-600 bg-slate-800/60 text-slate-300 hover:bg-slate-700/60"
+                      onClick={() => navigate("/create")}
+                      className="bg-[#99ff88] hover:bg-[#77dd66] rounded-2xl text-black border-4 border-black font-black transform hover:-translate-y-1 transition-all"
+                      style={{ fontFamily: 'Brice Black, sans-serif' }}
                     >
-                      Clear Filters
+                      Create Market
                     </Button>
-                  )}
-                  <Button
-                    onClick={() => navigate("/create")}
-                    className="bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 rounded-2xl text-white border border-violet-400"
-                  >
-                    Create Market
-                  </Button>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -596,3 +627,4 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({ markets: propMarkets, 
     </>
   )
 }
+

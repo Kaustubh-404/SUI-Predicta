@@ -35,7 +35,6 @@ export const LeaderboardPage: React.FC = () => {
         return
       }
 
-      // Get all WinningsClaimed events to calculate leaderboard
       const winEvents = await suiClient.queryEvents({
         query: {
           MoveEventType: `${PACKAGE_ID}::market::WinningsClaimed`,
@@ -44,7 +43,6 @@ export const LeaderboardPage: React.FC = () => {
         order: "descending",
       })
 
-      // Get all SharesPurchased events to calculate total bets
       const betEvents = await suiClient.queryEvents({
         query: {
           MoveEventType: `${PACKAGE_ID}::market::BetPlaced`,
@@ -53,7 +51,6 @@ export const LeaderboardPage: React.FC = () => {
         order: "descending",
       })
 
-      // Aggregate data by address
       const userStats = new Map<
         string,
         {
@@ -63,7 +60,6 @@ export const LeaderboardPage: React.FC = () => {
         }
       >()
 
-      // Process winning events
       winEvents.data.forEach((event) => {
         if (event.parsedJson) {
           const data = event.parsedJson as any
@@ -80,7 +76,6 @@ export const LeaderboardPage: React.FC = () => {
         }
       })
 
-      // Process betting events
       betEvents.data.forEach((event) => {
         if (event.parsedJson) {
           const data = event.parsedJson as any
@@ -95,14 +90,13 @@ export const LeaderboardPage: React.FC = () => {
         }
       })
 
-      // Convert to leaderboard entries and sort by winnings
       const entries: LeaderboardEntry[] = Array.from(userStats.entries())
         .map(([address, stats]) => ({
           address,
           winnings: stats.winnings,
           totalBets: stats.totalBets,
           winRate: stats.totalBets > 0 ? Math.round((stats.wins / stats.totalBets) * 100) : 0,
-          rank: 0, // Will be set after sorting
+          rank: 0,
         }))
         .sort((a, b) => b.winnings - a.winnings)
         .map((entry, index) => ({
@@ -112,7 +106,6 @@ export const LeaderboardPage: React.FC = () => {
 
       setLeaderboard(entries)
 
-      // Find current user's rank
       if (account?.address) {
         const userEntry = entries.find((entry) => entry.address === account.address)
         setUserRank(userEntry ? userEntry.rank : null)
@@ -125,45 +118,44 @@ export const LeaderboardPage: React.FC = () => {
     }
   }
 
-
   const getRankEmoji = (rank: number) => {
     switch (rank) {
-      case 1:
-        return "👑"
-      case 2:
-        return "🥈"
-      case 3:
-        return "🥉"
-      default:
-        return "⭐"
+      case 1: return "👑"
+      case 2: return "🥈"
+      case 3: return "🥉"
+      default: return "⭐"
     }
   }
 
   const getRankBackground = (rank: number) => {
     switch (rank) {
-      case 1:
-        return "from-amber-400 via-amber-500 to-amber-600"
-      case 2:
-        return "from-slate-400 via-slate-500 to-slate-600"
-      case 3:
-        return "from-amber-400 via-amber-500 to-amber-600"
-      default:
-        return "from-indigo-400 via-indigo-500 to-indigo-600"
+      case 1: return "bg-gradient-to-r from-[#d3aeff] to-[#b8a3ff]"
+      case 2: return "bg-gradient-to-r from-[#99ff88] to-[#77dd66]"
+      case 3: return "bg-gradient-to-r from-[#ff6961] to-[#dd4444]"
+      default: return "bg-white"
+    }
+  }
+
+  const getRankBorder = (rank: number) => {
+    switch (rank) {
+      case 1: return "border-[#d3aeff]"
+      case 2: return "border-[#99ff88]"
+      case 3: return "border-[#ff6961]"
+      default: return "border-black"
     }
   }
 
   if (loading) {
     return (
       <>
-        {/* Background */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+          <div className="absolute inset-0 bg-[#efe7f7]" />
         </div>
         
         <div className="relative z-10 container mx-auto px-4 py-8 max-w-lg">
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="animate-pulse bg-slate-800/60 rounded-2xl h-20"></div>
+              <div key={i} className="animate-pulse bg-white rounded-2xl h-20 border-4 border-black"></div>
             ))}
           </div>
         </div>
@@ -173,19 +165,15 @@ export const LeaderboardPage: React.FC = () => {
 
   return (
     <>
-      {/* Enhanced Background */}
+      {/* Orbit-style Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+        <div className="absolute inset-0 bg-[#efe7f7]" />
         
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/20 via-transparent to-indigo-500/20 animate-pulse" />
-        </div>
-
         {/* Floating trophies and medals */}
         {["🏆", "🥇", "🥈", "🥉", "⭐", "💎"].map((emoji, i) => (
           <motion.div
             key={i}
-            className="absolute text-2xl opacity-20"
+            className="absolute text-2xl opacity-30"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -210,32 +198,42 @@ export const LeaderboardPage: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-black text-black mb-2" style={{ fontFamily: 'Brice Black, sans-serif' }}>
               Leaderboard
             </h1>
-            <p className="text-slate-400">Top predictors by winnings</p>
+            <p className="text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Top predictors by winnings
+            </p>
           </div>
 
           {/* Stats Overview */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center">
-              <TrendingUp className="w-5 h-5 text-violet-400 mx-auto mb-1" />
-              <div className="text-lg font-bold text-white">{leaderboard.length}</div>
-              <div className="text-xs text-slate-400">Total Players</div>
+            <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+              <TrendingUp className="w-5 h-5 text-[#d3aeff] mx-auto mb-1" />
+              <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {leaderboard.length}
+              </div>
+              <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Total Players
+              </div>
             </div>
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center">
-              <Target className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-              <div className="text-lg font-bold text-white">
+            <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+              <Target className="w-5 h-5 text-[#99ff88] mx-auto mb-1" />
+              <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {leaderboard.length > 0 ? Math.round(leaderboard.reduce((sum, user) => sum + user.winRate, 0) / leaderboard.length) : 0}%
               </div>
-              <div className="text-xs text-slate-400">Avg Win Rate</div>
+              <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Avg Win Rate
+              </div>
             </div>
-            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center">
-              <Zap className="w-5 h-5 text-indigo-400 mx-auto mb-1" />
-              <div className="text-lg font-bold text-white">
+            <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+              <Zap className="w-5 h-5 text-[#ff6961] mx-auto mb-1" />
+              <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {leaderboard.length > 0 ? formatSUIAmount(Math.max(...leaderboard.map(u => u.winnings))) : '0'}
               </div>
-              <div className="text-xs text-slate-400">Top Winnings</div>
+              <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                Top Winnings
+              </div>
             </div>
           </div>
 
@@ -245,11 +243,11 @@ export const LeaderboardPage: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-r from-amber-500/20 to-amber-600/20 backdrop-blur-sm rounded-3xl p-6 border border-amber-400/30"
+              className="bg-gradient-to-r from-[#d3aeff]/20 to-[#99ff88]/20 backdrop-blur-sm rounded-3xl p-6 border-4 border-black shadow-xl"
             >
               <div className="text-center mb-4">
-                <h3 className="text-xl font-bold text-white flex items-center justify-center">
-                  <Trophy className="w-6 h-6 mr-2 text-amber-400" />
+                <h3 className="text-xl font-black text-black flex items-center justify-center" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                  <Trophy className="w-6 h-6 mr-2 text-[#d3aeff]" />
                   Hall of Fame
                 </h3>
               </div>
@@ -257,9 +255,15 @@ export const LeaderboardPage: React.FC = () => {
                 {leaderboard.slice(0, 3).map((user) => (
                   <div key={user.address} className="text-center">
                     <div className="text-3xl mb-2">{getRankEmoji(user.rank)}</div>
-                    <div className="text-sm font-medium mb-1 text-white">{formatAddress(user.address)}</div>
-                    <div className="text-xs text-amber-300">{formatSUIAmount(user.winnings)} SUI</div>
-                    <div className="text-xs text-amber-400">{user.winRate}% wins</div>
+                    <div className="text-sm font-black mb-1 text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                      {formatAddress(user.address)}
+                    </div>
+                    <div className="text-xs text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                      {formatSUIAmount(user.winnings)} SUI
+                    </div>
+                    <div className="text-xs text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                      {user.winRate}% wins
+                    </div>
                   </div>
                 ))}
               </div>
@@ -267,22 +271,26 @@ export const LeaderboardPage: React.FC = () => {
           )}
 
           {/* Full Leaderboard */}
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-3xl border border-slate-700 overflow-hidden">
-            <div className="p-4 border-b border-slate-600">
-              <h3 className="font-semibold flex items-center text-white">
-                <Activity className="w-5 h-5 mr-2 text-violet-400" />
+          <div className="bg-white rounded-3xl border-4 border-black overflow-hidden shadow-xl">
+            <div className="p-4 border-b-2 border-black bg-[#efe7f7]">
+              <h3 className="font-black flex items-center text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                <Activity className="w-5 h-5 mr-2 text-[#d3aeff]" />
                 Full Rankings
               </h3>
             </div>
 
             {leaderboard.length === 0 ? (
               <div className="p-8 text-center">
-                <Trophy className="w-12 h-12 mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-400 mb-2">No leaderboard data yet</p>
-                <p className="text-sm text-slate-500">Start betting to see rankings appear!</p>
+                <Trophy className="w-12 h-12 mx-auto text-black/30 mb-3" />
+                <p className="text-black/80 mb-2 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  No leaderboard data yet
+                </p>
+                <p className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  Start betting to see rankings appear!
+                </p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-700">
+              <div className="divide-y-2 divide-black">
                 {leaderboard.slice(0, 10).map((user, index) => (
                   <motion.div
                     key={user.address}
@@ -290,32 +298,37 @@ export const LeaderboardPage: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                     className={`p-4 flex items-center justify-between ${
-                      user.address === account?.address ? "bg-violet-500/10 border-l-4 border-violet-400" : ""
+                      user.address === account?.address ? "bg-[#d3aeff]/20 border-l-4 border-[#d3aeff]" : ""
                     }`}
                   >
                     <div className="flex items-center space-x-3">
                       <div
-                        className={`w-10 h-10 bg-gradient-to-br ${getRankBackground(user.rank)} rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-lg`}
+                        className={`w-10 h-10 ${getRankBackground(user.rank)} rounded-2xl flex items-center justify-center text-black font-black text-sm shadow-lg border-2 ${getRankBorder(user.rank)}`}
+                        style={{ fontFamily: 'Brice Black, sans-serif' }}
                       >
                         {user.rank}
                       </div>
                       <div>
-                        <div className="font-medium flex items-center text-white">
+                        <div className="font-black flex items-center text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                           {formatAddress(user.address)}
                           {user.address === account?.address && (
-                            <span className="ml-2 text-xs bg-violet-500/20 text-violet-300 px-2 py-1 rounded-full border border-violet-500/30">
+                            <span className="ml-2 text-xs bg-[#d3aeff] text-black px-2 py-1 rounded-full border-2 border-black font-black">
                               You
                             </span>
                           )}
                         </div>
-                        <div className="text-sm text-slate-400">
+                        <div className="text-sm text-black/70 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                           {user.totalBets} bets • {user.winRate}% win rate
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-emerald-400">{formatSUIAmount(user.winnings)} SUI</div>
-                      <div className="text-xs text-slate-500">Total winnings</div>
+                      <div className="font-black text-[#99ff88]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                        {formatSUIAmount(user.winnings)} SUI
+                      </div>
+                      <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                        Total winnings
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -329,19 +342,23 @@ export const LeaderboardPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700"
+              className="bg-white rounded-2xl p-4 border-4 border-black shadow-lg"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <User className="w-6 h-6 text-indigo-400" />
+                  <User className="w-6 h-6 text-[#d3aeff]" />
                   <div>
-                    <div className="font-semibold text-white">Your Rank</div>
-                    <div className="text-sm text-slate-400">
+                    <div className="font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                      Your Rank
+                    </div>
+                    <div className="text-sm text-black/70 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                       {userRank <= 10 ? "You're in the top 10!" : "Keep betting to climb higher!"}
                     </div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-indigo-400">#{userRank}</div>
+                <div className="text-2xl font-black text-[#d3aeff]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                  #{userRank}
+                </div>
               </div>
             </motion.div>
           )}
@@ -351,11 +368,13 @@ export const LeaderboardPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700"
+            className="bg-white rounded-2xl p-4 border-4 border-black shadow-lg"
           >
             <div className="text-center">
-              <h4 className="font-semibold text-white mb-2">🚀 How to Climb the Leaderboard</h4>
-              <p className="text-sm text-slate-400">
+              <h4 className="font-black text-black mb-2" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                🚀 How to Climb the Leaderboard
+              </h4>
+              <p className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                 Win prediction markets to earn SUI rewards and climb the rankings. The more you win, the higher you'll rank!
               </p>
             </div>

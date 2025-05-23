@@ -19,35 +19,14 @@ export const Navigation: React.FC = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
-      {/* Enhanced Background with Blur */}
-      <div className="" />
+      {/* Orbit-style background */}
+      <div className="absolute inset-0 bg-[#efe7f7] opacity-95" />
 
       <div className="relative px-4 py-1">
-        <nav className="bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700 overflow-hidden">
-          {/* Subtle animated background pattern */}
+        <nav className="rounded-3xl  border-3 border-black">
+          {/* Orbit-style decorative elements */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-400/20 via-transparent to-indigo-400/20" />
-            {[...Array(5)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-16 h-16 bg-gradient-to-r from-violet-400/10 to-indigo-400/10 rounded-full"
-                style={{
-                  left: `${i * 20}%`,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.1, 0.2, 0.1],
-                }}
-                transition={{
-                  duration: 4,
-                  delay: i * 0.2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                }}
-              />
-            ))}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#d3aeff]/20 via-transparent to-[#99ff88]/20" />
           </div>
 
           <div className="relative flex justify-around items-center py-2">
@@ -62,27 +41,27 @@ export const Navigation: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {/* Active Background */}
+                    {/* Active Background with Orbit styling */}
                     {active && (
                       <motion.div
                         layoutId="navIndicator"
-                        className="absolute inset-0 bg-slate-800/80 rounded-2xl backdrop-blur-sm border border-slate-600"
+                        className="absolute inset-0 bg-[#d3aeff] rounded-2xl border-2 border-black"
                         initial={false}
                         transition={{ type: "spring", duration: 0.6, bounce: 0.3 }}
                       />
                     )}
 
-                    {/* Hover Glow Effect */}
+                    {/* Hover Effect */}
                     <motion.div
-                      className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 rounded-2xl blur-lg`}
-                      whileHover={{ opacity: 0.2 }}
+                      className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 rounded-2xl`}
+                      whileHover={{ opacity: 0.1 }}
                       transition={{ duration: 0.3 }}
                     />
 
                     <div className="relative z-10 flex flex-col items-center">
-                      {/* Icon with Enhanced Styling */}
+                      {/* Icon with enhanced styling */}
                       <motion.div
-                        className={`p-2 rounded-xl ${active ? "bg-slate-700/50" : ""}`}
+                        className={`p-2 rounded-xl ${active ? "bg-white/20" : ""}`}
                         animate={active ? { 
                           y: [0, -2, 0],
                           transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
@@ -90,22 +69,23 @@ export const Navigation: React.FC = () => {
                       >
                         <Icon className={`w-6 h-6 ${
                           active 
-                            ? "text-white drop-shadow-lg" 
-                            : "text-slate-400 hover:text-slate-300"
+                            ? "text-black drop-shadow-sm" 
+                            : "text-black/60 hover:text-black"
                         } transition-colors duration-200`} />
                       </motion.div>
 
-                      {/* Label with Animation */}
+                      {/* Label with Orbit font */}
                       <motion.span
-                        className={`text-xs mt-1 font-medium ${
+                        className={`text-xs mt-1 font-bold ${
                           active 
-                            ? "text-white font-semibold" 
-                            : "text-slate-500 hover:text-slate-400"
+                            ? "text-black" 
+                            : "text-black/60 hover:text-black"
                         } transition-colors duration-200`}
                         animate={active ? { 
                           scale: [1, 1.05, 1],
                           transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
                         } : {}}
+                        style={{ fontFamily: 'Brice SemiBold, sans-serif' }}
                       >
                         {item.label}
                       </motion.span>
@@ -113,19 +93,14 @@ export const Navigation: React.FC = () => {
                       {/* Active Indicator Dot */}
                       {active && (
                         <motion.div
-                          className="absolute -top-1 w-2 h-2 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-full shadow-lg"
+                          className="absolute -top-1 w-2 h-2 bg-[#99ff88] rounded-full shadow-lg border border-black"
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ 
                             scale: 1, 
                             opacity: 1,
-                            boxShadow: [
-                              "0 0 0 0 rgba(139, 92, 246, 0.7)",
-                              "0 0 0 8px rgba(139, 92, 246, 0)",
-                            ]
                           }}
                           transition={{ 
                             scale: { type: "spring", duration: 0.5 },
-                            boxShadow: { duration: 1.5, repeat: Infinity }
                           }}
                         />
                       )}
@@ -133,7 +108,7 @@ export const Navigation: React.FC = () => {
 
                     {/* Ripple Effect on Tap */}
                     <motion.div
-                      className="absolute inset-0 bg-slate-700/30 rounded-2xl"
+                      className="absolute inset-0 bg-black/10 rounded-2xl"
                       initial={{ scale: 0, opacity: 0 }}
                       whileTap={{ scale: 1.5, opacity: [0, 0.3, 0] }}
                       transition={{ duration: 0.3 }}
@@ -144,8 +119,8 @@ export const Navigation: React.FC = () => {
             })}
           </div>
 
-          {/* Bottom accent line */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent" />
+          {/* Bottom accent line with Orbit colors */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#d3aeff] via-[#99ff88] to-[#d3aeff]" />
         </nav>
       </div>
     </div>

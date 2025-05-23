@@ -39,24 +39,15 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
   }, [markets.length])
 
   useEffect(() => {
-    // Initialize AI agent
     aiAgent.start()
     updateAgentStatus()
-
-    // Update status every 30 seconds
     const statusInterval = setInterval(updateAgentStatus, 30000)
-
-    return () => {
-      clearInterval(statusInterval)
-    }
+    return () => clearInterval(statusInterval)
   }, [])
 
   useEffect(() => {
-    // Calculate real stats from markets
     const totalVolume = markets.reduce((sum, market) => sum + market.totalPool, 0)
     const activeBets = markets.filter((market) => market.status === 0).length
-
-    // Calculate win rate based on user's past performance (mock for now)
     const mockWinRate = Math.min(Math.max(45 + Math.random() * 20, 45), 85)
 
     setStats({
@@ -90,7 +81,6 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
         return
       }
 
-      // For demo purposes, randomly choose option A or B
       const option = Math.random() > 0.5 ? 0 : 1
       const optionName = option === 0 ? market.optionA : market.optionB
 
@@ -99,14 +89,10 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
         description: `Betting ${betAmount} SUI on "${optionName}"`,
       })
 
-      // Create transaction
       const tx = placeBetTx(market.id, option, parseSUI(betAmount))
 
-      // Sign and execute
       signAndExecuteTransaction(
-        {
-          transaction: tx,
-        },
+        { transaction: tx },
         {
           onSuccess: (result) => {
             console.log("Transaction successful:", result)
@@ -168,68 +154,15 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
 
   return (
     <>
-      {/* Enhanced Background with Modern Elements */}
+      {/* Orbit-style Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Modern gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+        <div className="absolute inset-0 bg-[#efe7f7]" />
         
-        {/* Animated mesh gradient overlay */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/20 via-transparent to-indigo-500/20 animate-pulse" />
-        </div>
-
-        {/* Floating geometric elements */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute opacity-10"
-            style={{
-              background: `linear-gradient(45deg, ${
-                i % 4 === 0 ? "#8b5cf6, #3b82f6" : 
-                i % 4 === 1 ? "#06b6d4, #10b981" : 
-                i % 4 === 2 ? "#f59e0b, #ef4444" :
-                "#ec4899, #8b5cf6"
-              })`,
-              width: Math.random() * 120 + 60,
-              height: Math.random() * 120 + 60,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              borderRadius: i % 2 === 0 ? '50%' : '25%',
-            }}
-            animate={{
-              x: [0, Math.random() * 60 - 30],
-              y: [0, Math.random() * 60 - 30],
-              scale: [1, 1.1, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: Math.random() * 15 + 10,
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div 
-            className="w-full h-full"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: '50px 50px'
-            }}
-          />
-        </div>
-
-        {/* Floating icons */}
+        {/* Decorative floating elements */}
         {["💎", "🚀", "⭐", "🔥", "💰", "🎯"].map((emoji, i) => (
           <motion.div
             key={i}
-            className="absolute text-2xl opacity-20"
+            className="absolute text-2xl opacity-30"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -251,36 +184,35 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-6 max-w-lg min-h-screen">
-        {/* Header */}
+        {/* Header with Orbit styling */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent mb-2">
-            SUI Predictions
+          <h1 className="text-4xl font-black text-black mb-2" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+            ORBIT
           </h1>
-          <p className="text-slate-400 mb-4">Swipe right to bet, left to skip</p>
+          <p className="text-black/80 mb-4 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+            Swipe right to bet, left to skip
+          </p>
 
-          {/* AI Agent Status */}
+          {/* AI Agent Status with Orbit design */}
           <div
             className={`${
               agentStatus?.isRunning 
-                ? "bg-emerald-500/20 border-emerald-500/50" 
-                : "bg-violet-500/10 border-violet-500/30"
-            } rounded-2xl p-3 mb-4 border backdrop-blur-sm`}
+                ? "bg-[#99ff88] border-black" 
+                : "bg-[#d3aeff] border-black"
+            } rounded-2xl p-3 mb-4 border-4 backdrop-blur-sm shadow-lg`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
                   className={`w-2 h-2 rounded-full ${
                     agentStatus?.isRunning 
-                      ? "bg-emerald-400 animate-pulse" 
-                      : "bg-violet-400"
+                      ? "bg-black animate-pulse" 
+                      : "bg-black"
                   }`}
                 ></div>
                 <span
-                  className={`text-sm font-medium ${
-                    agentStatus?.isRunning 
-                      ? "text-emerald-300" 
-                      : "text-violet-300"
-                  }`}
+                  className="text-sm font-black text-black"
+                  style={{ fontFamily: 'Brice Black, sans-serif' }}
                 >
                   AI Agent {agentStatus?.isRunning ? "Active" : "Inactive"}
                 </span>
@@ -289,40 +221,52 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
                 onClick={() => setShowAgentDashboard(true)} 
                 variant="ghost" 
                 size="sm" 
-                className="h-8 w-8 p-0 hover:bg-slate-700/50"
+                className="h-8 w-8 p-0 hover:bg-black/10 rounded-xl"
               >
-                <Settings className="w-4 h-4 text-emerald-300" />
+                <Settings className="w-4 h-4 text-black" />
               </Button>
             </div>
             {agentStatus?.isRunning && (
-              <div className="text-xs text-white mt-1">
+              <div className="text-xs text-black/80 mt-1 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                 Generated {agentStatus.metrics?.totalMarketsGenerated || 0} markets • Next: {agentStatus.nextExecution}
               </div>
             )}
           </div>
         </motion.div>
 
-        {/* Stats Cards */}
+        {/* Stats Cards with Orbit design */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="grid grid-cols-3 gap-3 mb-6"
         >
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center shadow-lg">
-            <TrendingUp className="w-5 h-5 text-violet-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{stats.totalBets}</div>
-            <div className="text-xs text-slate-400">Active Markets</div>
+          <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+            <TrendingUp className="w-5 h-5 text-[#d3aeff] mx-auto mb-1" />
+            <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              {stats.totalBets}
+            </div>
+            <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Active Markets
+            </div>
           </div>
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center shadow-lg">
-            <Target className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{stats.winRate}%</div>
-            <div className="text-xs text-slate-400">Success Rate</div>
+          <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+            <Target className="w-5 h-5 text-[#99ff88] mx-auto mb-1" />
+            <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              {stats.winRate}%
+            </div>
+            <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Success Rate
+            </div>
           </div>
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-3 border border-slate-700 text-center shadow-lg">
-            <Zap className="w-5 h-5 text-indigo-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-white">{markets.length}</div>
-            <div className="text-xs text-slate-400">Available</div>
+          <div className="bg-white rounded-2xl p-3 border-4 border-black text-center shadow-lg">
+            <Zap className="w-5 h-5 text-[#ff6961] mx-auto mb-1" />
+            <div className="text-lg font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              {markets.length}
+            </div>
+            <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Available
+            </div>
           </div>
         </motion.div>
 
@@ -353,77 +297,83 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="text-center py-16"
               >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "reverse",
-                  }}
-                  className="text-6xl mb-4"
-                >
-                  🎉
-                </motion.div>
-                <h2 className="text-2xl font-bold mb-4 text-white">All Markets Swiped!</h2>
-                <p className="text-slate-400 mb-8">
-                  You've seen all available markets. Generate new ones or check back later!
-                </p>
-
-                <div className="space-y-4">
-                  <Button
-                    onClick={generateAIMarkets}
-                    disabled={isGeneratingMarkets || agentStatus?.isGenerating}
-                    className="w-full bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 py-4 text-white shadow-lg rounded-2xl border border-violet-400"
+                <div className="bg-white rounded-3xl border-4 border-black p-8 shadow-xl">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatType: "reverse",
+                    }}
+                    className="text-6xl mb-4"
                   >
-                    {isGeneratingMarkets || agentStatus?.isGenerating ? (
-                      <>
-                        <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                        AI Agent Working...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        Generate AI Markets Now
-                      </>
-                    )}
-                  </Button>
+                    🎉
+                  </motion.div>
+                  <h2 className="text-2xl font-black mb-4 text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                    All Markets Swiped!
+                  </h2>
+                  <p className="text-black/80 mb-8 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                    You've seen all available markets. Generate new ones or check back later!
+                  </p>
 
-                  <Button
-                    onClick={onMarketsUpdate}
-                    variant="outline"
-                    className="w-full py-4 border border-slate-600 bg-slate-800/60 backdrop-blur-sm shadow-lg rounded-2xl text-slate-300 hover:bg-slate-700/60"
-                    disabled={isGeneratingMarkets}
-                  >
-                    <RefreshCw className="w-5 h-5 mr-2" />
-                    Refresh Markets
-                  </Button>
+                  <div className="space-y-4">
+                    <Button
+                      onClick={generateAIMarkets}
+                      disabled={isGeneratingMarkets || agentStatus?.isGenerating}
+                      className="w-full bg-[#99ff88] hover:bg-[#77dd66] py-4 text-black shadow-lg rounded-2xl border-4 border-black font-black transform hover:-translate-y-1 transition-all"
+                      style={{ fontFamily: 'Brice Black, sans-serif' }}
+                    >
+                      {isGeneratingMarkets || agentStatus?.isGenerating ? (
+                        <>
+                          <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                          AI Agent Working...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5 mr-2" />
+                          Generate AI Markets Now
+                        </>
+                      )}
+                    </Button>
+
+                    <Button
+                      onClick={onMarketsUpdate}
+                      variant="outline"
+                      className="w-full py-4 border-4 border-black bg-white shadow-lg rounded-2xl text-black hover:bg-[#efe7f7] font-black transform hover:-translate-y-1 transition-all"
+                      disabled={isGeneratingMarkets}
+                      style={{ fontFamily: 'Brice Black, sans-serif' }}
+                    >
+                      <RefreshCw className="w-5 h-5 mr-2" />
+                      Refresh Markets
+                    </Button>
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* AI Agent Info */}
+        {/* AI Agent Info with Orbit styling */}
         {agentStatus?.metrics && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 shadow-lg mb-6"
+            className="bg-white rounded-2xl p-4 border-4 border-black shadow-lg mb-6"
           >
-            <h4 className="font-semibold text-white mb-3 flex items-center">
+            <h4 className="font-black text-black mb-3 flex items-center" style={{ fontFamily: 'Brice Black, sans-serif' }}>
               <span className="text-2xl mr-2">🤖</span>
               AI Agent Performance
             </h4>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <div className="text-violet-300 font-medium">
+                <div className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                   Total Generated: {agentStatus.metrics.totalMarketsGenerated}
                 </div>
-                <div className="text-violet-300 font-medium">
+                <div className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                   Success Rate:{" "}
                   {agentStatus.metrics.successfulGenerations > 0
                     ? Math.round(
@@ -436,10 +386,10 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
                 </div>
               </div>
               <div>
-                <div className="text-violet-300 font-medium">
+                <div className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                   Daily Streak: {agentStatus.metrics.dailyGenerationStreak}
                 </div>
-                <div className="text-violet-300 font-medium">
+                <div className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                   Avg Speed:{" "}
                   {agentStatus.metrics.averageGenerationTime > 0
                     ? Math.round(agentStatus.metrics.averageGenerationTime / 1000) + "s"
@@ -450,19 +400,19 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
           </motion.div>
         )}
 
-        {/* Tips Section */}
+        {/* Tips Section with Orbit design */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="mb-6 pt-5"
         >
-          <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 border border-slate-700 shadow-lg">
-            <h4 className="font-semibold text-white mb-2 flex items-center">
+          <div className="bg-white rounded-2xl p-4 border-4 border-black shadow-lg">
+            <h4 className="font-black text-black mb-2 flex items-center" style={{ fontFamily: 'Brice Black, sans-serif' }}>
               <span className="text-2xl mr-2">💡</span>
               Pro Tips
             </h4>
-            <ul className="text-sm text-slate-400 space-y-1">
+            <ul className="text-sm text-black/80 space-y-1 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
               <li>• Swipe right to customize your bet amount (0.01 - 100 SUI)</li>
               <li>• Higher odds = higher potential winnings</li>
               <li>• AI generates fresh markets daily based on trending topics</li>
@@ -483,3 +433,4 @@ export const HomePage: React.FC<HomePageProps> = ({ markets, loading, onMarketsU
     </>
   )
 }
+

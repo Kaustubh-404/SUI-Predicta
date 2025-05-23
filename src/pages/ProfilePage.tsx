@@ -44,7 +44,6 @@ export const ProfilePage: React.FC = () => {
 
       if (!account?.address) return
 
-      // Load user balance
       const coins = await suiClient.getCoins({
         owner: account.address,
         coinType: "0x2::sui::SUI",
@@ -54,7 +53,6 @@ export const ProfilePage: React.FC = () => {
         return sum + Number.parseInt(coin.balance)
       }, 0)
 
-      // Load user bet history from events
       let totalBets = 0
       let totalWinnings = 0
       let activeBets = 0
@@ -62,7 +60,6 @@ export const ProfilePage: React.FC = () => {
 
       try {
         if (PACKAGE_ID) {
-          // Query SharesPurchased events for this user
           const betEvents = await suiClient.queryEvents({
             query: {
               MoveEventType: `${PACKAGE_ID}::market::BetPlaced`,
@@ -77,7 +74,6 @@ export const ProfilePage: React.FC = () => {
 
           totalBets = userBets.length
 
-          // Query WinningsClaimed events for this user
           const winEvents = await suiClient.queryEvents({
             query: {
               MoveEventType: `${PACKAGE_ID}::market::WinningsClaimed`,
@@ -95,14 +91,11 @@ export const ProfilePage: React.FC = () => {
             return sum + (amount ? Number.parseInt(amount) : 0)
           }, 0)
 
-          // Count active bets (bets without corresponding claims)
           const claimedMarkets = new Set(userWins.map((event) => (event.parsedJson as any).market_id))
-
           activeBets = userBets.filter((event) => !claimedMarkets.has((event.parsedJson as any).market_id)).length
         }
       } catch (eventError) {
         console.log("Could not load event data:", eventError)
-        // Continue with zero values if events can't be loaded
       }
 
       const winRate = totalBets > 0 ? Math.round((userWins.length / totalBets) * 100) : 0
@@ -151,13 +144,13 @@ export const ProfilePage: React.FC = () => {
     return (
       <>
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+          <div className="absolute inset-0 bg-[#efe7f7]" />
         </div>
         
         <div className="relative z-10 container mx-auto px-4 py-8 max-w-lg">
           <div className="space-y-6">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="animate-pulse bg-slate-800/60 rounded-2xl h-20"></div>
+              <div key={i} className="animate-pulse bg-white rounded-2xl h-20 border-4 border-black"></div>
             ))}
           </div>
         </div>
@@ -167,19 +160,15 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <>
-      {/* Enhanced Background */}
+      {/* Orbit-style Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/50 to-indigo-900" />
+        <div className="absolute inset-0 bg-[#efe7f7]" />
         
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/20 via-transparent to-indigo-500/20 animate-pulse" />
-        </div>
-
         {/* Floating profile-related icons */}
         {["👤", "🏆", "💰", "📊", "⚡", "🎯"].map((emoji, i) => (
           <motion.div
             key={i}
-            className="absolute text-2xl opacity-20"
+            className="absolute text-2xl opacity-30"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -204,43 +193,55 @@ export const ProfilePage: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-black text-black mb-2" style={{ fontFamily: 'Brice Black, sans-serif' }}>
               Profile
             </h1>
-            <p className="text-slate-400">Your prediction journey</p>
+            <p className="text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+              Your prediction journey
+            </p>
           </div>
 
-          {/* Wallet Info */}
+          {/* Wallet Info Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="bg-gradient-to-br from-violet-500 to-indigo-500 rounded-3xl p-6 text-white border border-violet-400 shadow-2xl"
+            className="bg-gradient-to-r from-[#d3aeff] to-[#b8a3ff] rounded-3xl p-6 text-black border-4 border-black shadow-2xl"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                  <User className="w-6 h-6" />
+                <div className="w-12 h-12 bg-white/80 rounded-2xl flex items-center justify-center backdrop-blur-sm border-2 border-black">
+                  <User className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Predictor</h3>
-                  <p className="text-sm opacity-90">Since {userStats.joinedDate}</p>
+                  <h3 className="font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                    Predictor
+                  </h3>
+                  <p className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                    Since {userStats.joinedDate}
+                  </p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold">{formatSUIAmount(userStats.balance)}</div>
-                <div className="text-sm opacity-90">SUI Balance</div>
+                <div className="text-2xl font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                  {formatSUIAmount(userStats.balance)}
+                </div>
+                <div className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  SUI Balance
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between bg-white/10 rounded-2xl p-3 backdrop-blur-sm">
-              <span className="font-mono text-sm">{formatAddress(account?.address || "")}</span>
+            <div className="flex items-center justify-between bg-white/20 rounded-2xl p-3 backdrop-blur-sm border-2 border-black">
+              <span className="font-black text-sm text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {formatAddress(account?.address || "")}
+              </span>
               <div className="flex items-center space-x-2">
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={handleCopyAddress}
-                  className="text-white hover:bg-white/10 p-2 rounded-xl"
+                  className="text-black hover:bg-white/10 p-2 rounded-xl border-2 border-black bg-white/20"
                 >
                   <Copy className="w-4 h-4" />
                 </Button>
@@ -250,7 +251,7 @@ export const ProfilePage: React.FC = () => {
                   onClick={() =>
                     account?.address && window.open(`https://testnet.suivision.xyz/account/${account.address}`, "_blank")
                   }
-                  className="text-white hover:bg-white/10 p-2 rounded-xl"
+                  className="text-black hover:bg-white/10 p-2 rounded-xl border-2 border-black bg-white/20"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </Button>
@@ -264,52 +265,68 @@ export const ProfilePage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+              className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
             >
               <div className="flex items-center space-x-3 mb-2">
-                <BarChart3 className="w-5 h-5 text-violet-400" />
-                <span className="text-sm text-slate-400">Total Bets</span>
+                <BarChart3 className="w-5 h-5 text-[#d3aeff]" />
+                <span className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  Total Bets
+                </span>
               </div>
-              <div className="text-2xl font-bold text-violet-400">{userStats.totalBets}</div>
+              <div className="text-2xl font-black text-[#d3aeff]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {userStats.totalBets}
+              </div>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+              className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
             >
               <div className="flex items-center space-x-3 mb-2">
-                <Trophy className="w-5 h-5 text-emerald-400" />
-                <span className="text-sm text-slate-400">Winnings</span>
+                <Trophy className="w-5 h-5 text-[#99ff88]" />
+                <span className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  Winnings
+                </span>
               </div>
-              <div className="text-2xl font-bold text-emerald-400">{formatSUIAmount(userStats.totalWinnings)}</div>
+              <div className="text-2xl font-black text-[#99ff88]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {formatSUIAmount(userStats.totalWinnings)}
+              </div>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+              className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
             >
               <div className="flex items-center space-x-3 mb-2">
-                <Target className="w-5 h-5 text-indigo-400" />
-                <span className="text-sm text-slate-400">Win Rate</span>
+                <Target className="w-5 h-5 text-[#ff6b6b]" />
+                <span className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  Win Rate
+                </span>
               </div>
-              <div className="text-2xl font-bold text-indigo-400">{userStats.winRate}%</div>
+              <div className="text-2xl font-black text-[#ff6b6b]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {userStats.winRate}%
+              </div>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+              className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
             >
               <div className="flex items-center space-x-3 mb-2">
-                <Clock className="w-5 h-5 text-amber-400" />
-                <span className="text-sm text-slate-400">Active Bets</span>
+                <Clock className="w-5 h-5 text-[#ffb347]" />
+                <span className="text-sm text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  Active Bets
+                </span>
               </div>
-              <div className="text-2xl font-bold text-amber-400">{userStats.activeBets}</div>
+              <div className="text-2xl font-black text-[#ffb347]" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                {userStats.activeBets}
+              </div>
             </motion.div>
           </div>
 
@@ -318,33 +335,33 @@ export const ProfilePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+            className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
           >
-            <h3 className="font-semibold mb-4 flex items-center text-white">
-              <TrendingUp className="w-5 h-5 mr-2 text-violet-400" />
+            <h3 className="font-black mb-4 flex items-center text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              <TrendingUp className="w-5 h-5 mr-2 text-[#d3aeff]" />
               Performance Overview
             </h3>
 
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="text-center">
-                <div className="text-xl font-bold text-violet-400">{userStats.totalBets > 0 ? "🔥" : "🌱"}</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xl font-bold text-[#d3aeff]">{userStats.totalBets > 0 ? "🔥" : "🌱"}</div>
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                   {userStats.totalBets > 10 ? "Veteran" : userStats.totalBets > 0 ? "Rising" : "Newcomer"}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-emerald-400">
+                <div className="text-xl font-bold text-[#99ff88]">
                   {userStats.winRate >= 70 ? "🏆" : userStats.winRate >= 50 ? "⭐" : "🎯"}
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                   {userStats.winRate >= 70 ? "Expert" : userStats.winRate >= 50 ? "Good" : "Learning"}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-indigo-400">
+                <div className="text-xl font-bold text-[#ffb347]">
                   {userStats.totalWinnings > 10000000000 ? "💎" : userStats.totalWinnings > 1000000000 ? "💰" : "🪙"}
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                   {userStats.totalWinnings > 10000000000 ? "Whale" : userStats.totalWinnings > 1000000000 ? "Earner" : "Starter"}
                 </div>
               </div>
@@ -354,12 +371,12 @@ export const ProfilePage: React.FC = () => {
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-400">Experience Level</span>
-                  <span className="text-violet-400">{Math.min(userStats.totalBets * 10, 100)}%</span>
+                  <span className="text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>Experience Level</span>
+                  <span className="text-[#d3aeff] font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>{Math.min(userStats.totalBets * 10, 100)}%</span>
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="w-full bg-black/20 rounded-full h-3 border-2 border-black">
                   <div 
-                    className="bg-gradient-to-r from-violet-500 to-indigo-500 h-2 rounded-full transition-all duration-1000"
+                    className="bg-gradient-to-r from-[#d3aeff] to-[#b8a3ff] h-full rounded-full transition-all duration-1000 border border-black"
                     style={{ width: `${Math.min(userStats.totalBets * 10, 100)}%` }}
                   />
                 </div>
@@ -367,12 +384,12 @@ export const ProfilePage: React.FC = () => {
 
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-400">Prediction Accuracy</span>
-                  <span className="text-emerald-400">{userStats.winRate}%</span>
+                  <span className="text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>Prediction Accuracy</span>
+                  <span className="text-[#99ff88] font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>{userStats.winRate}%</span>
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2">
+                <div className="w-full bg-black/20 rounded-full h-3 border-2 border-black">
                   <div 
-                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-2 rounded-full transition-all duration-1000"
+                    className="bg-gradient-to-r from-[#99ff88] to-[#66cc55] h-full rounded-full transition-all duration-1000 border border-black"
                     style={{ width: `${userStats.winRate}%` }}
                   />
                 </div>
@@ -385,39 +402,39 @@ export const ProfilePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+            className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
           >
-            <h3 className="font-semibold mb-4 flex items-center text-white">
-              <Award className="w-5 h-5 mr-2 text-violet-400" />
+            <h3 className="font-black mb-4 flex items-center text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              <Award className="w-5 h-5 mr-2 text-[#d3aeff]" />
               Recent Activity
             </h3>
 
             {userStats.totalBets === 0 ? (
               <div className="text-center py-8">
-                <Coins className="w-12 h-12 mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-400">No betting activity yet</p>
-                <p className="text-sm text-slate-500">Start swiping to place your first bet!</p>
+                <Coins className="w-12 h-12 mx-auto text-black/40 mb-3" />
+                <p className="text-black/80 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>No betting activity yet</p>
+                <p className="text-sm text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>Start swiping to place your first bet!</p>
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="text-sm text-slate-400 space-y-2">
+                <div className="text-sm text-black/80 space-y-2" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                   <div className="flex justify-between">
                     <span>Total Predictions:</span>
-                    <span className="text-white font-medium">{userStats.totalBets}</span>
+                    <span className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>{userStats.totalBets}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Total Winnings:</span>
-                    <span className="text-emerald-400 font-medium">{formatSUIAmount(userStats.totalWinnings)} SUI</span>
+                    <span className="text-[#99ff88] font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>{formatSUIAmount(userStats.totalWinnings)} SUI</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Success Rate:</span>
-                    <span className={`font-medium ${userStats.winRate >= 50 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    <span className={`font-black ${userStats.winRate >= 50 ? 'text-[#99ff88]' : 'text-[#ffb347]'}`} style={{ fontFamily: 'Brice Black, sans-serif' }}>
                       {userStats.winRate}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Active Positions:</span>
-                    <span className="text-indigo-400 font-medium">{userStats.activeBets}</span>
+                    <span className="text-[#ff6b6b] font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>{userStats.activeBets}</span>
                   </div>
                 </div>
               </div>
@@ -429,25 +446,25 @@ export const ProfilePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border border-slate-700"
+            className="bg-white rounded-2xl p-6 border-4 border-black shadow-lg"
           >
-            <h3 className="font-semibold mb-4 flex items-center text-white">
-              <Zap className="w-5 h-5 mr-2 text-violet-400" />
+            <h3 className="font-black mb-4 flex items-center text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+              <Zap className="w-5 h-5 mr-2 text-[#d3aeff]" />
               Achievements
             </h3>
 
             <div className="grid grid-cols-3 gap-3">
-              <div className={`text-center p-3 rounded-xl ${userStats.totalBets >= 1 ? 'bg-violet-500/20 border border-violet-500/30' : 'bg-slate-700/30'}`}>
+              <div className={`text-center p-3 rounded-xl border-2 border-black ${userStats.totalBets >= 1 ? 'bg-[#d3aeff]/20' : 'bg-black/10'}`}>
                 <div className="text-2xl mb-1">🚀</div>
-                <div className="text-xs text-slate-400">First Bet</div>
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>First Bet</div>
               </div>
-              <div className={`text-center p-3 rounded-xl ${userStats.totalBets >= 10 ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-slate-700/30'}`}>
+              <div className={`text-center p-3 rounded-xl border-2 border-black ${userStats.totalBets >= 10 ? 'bg-[#99ff88]/20' : 'bg-black/10'}`}>
                 <div className="text-2xl mb-1">⭐</div>
-                <div className="text-xs text-slate-400">10 Bets</div>
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>10 Bets</div>
               </div>
-              <div className={`text-center p-3 rounded-xl ${userStats.winRate >= 60 ? 'bg-amber-500/20 border border-amber-500/30' : 'bg-slate-700/30'}`}>
+              <div className={`text-center p-3 rounded-xl border-2 border-black ${userStats.winRate >= 60 ? 'bg-[#ffb347]/20' : 'bg-black/10'}`}>
                 <div className="text-2xl mb-1">🎯</div>
-                <div className="text-xs text-slate-400">60% Win Rate</div>
+                <div className="text-xs text-black/60 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>60% Win Rate</div>
               </div>
             </div>
           </motion.div>
@@ -457,7 +474,8 @@ export const ProfilePage: React.FC = () => {
             <Button
               onClick={handleDisconnect}
               variant="outline"
-              className="w-full border border-slate-600 bg-slate-800/60 text-slate-300 hover:bg-slate-700/60 hover:text-white flex items-center justify-center rounded-2xl py-4"
+              className="w-full border-4 border-black bg-white text-black hover:bg-black hover:text-white flex items-center justify-center rounded-2xl py-6 font-black shadow-lg transition-all duration-200"
+              style={{ fontFamily: 'Brice Black, sans-serif' }}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Disconnect Wallet

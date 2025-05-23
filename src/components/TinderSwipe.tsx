@@ -41,7 +41,6 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
     currentIndexRef.current = val;
   }, []);
 
-
   const swiped = useCallback(
     (direction: string, market: Market, index: number) => {
       setLastDirection(direction);
@@ -50,9 +49,8 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
       if (direction === 'left') {
         onSwipeLeft(market);
       } else if (direction === 'right') {
-        // Show betting modal instead of immediate bet
         setSelectedMarket(market);
-        setSelectedOption(Math.random() > 0.5 ? 0 : 1); // Random option for demo
+        setSelectedOption(Math.random() > 0.5 ? 0 : 1);
         setShowBetModal(true);
       }
     },
@@ -63,8 +61,6 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
     console.log(`${markets[idx]?.question} left the screen!`);
     currentIndexRef.current >= idx && childRefs[idx].current?.restoreCard();
   }, [markets, childRefs]);
-
-
 
   const handleBetConfirm = () => {
     if (selectedMarket) {
@@ -103,23 +99,22 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
     return (
       <div className="flex items-center justify-center h-[70vh]">
         <div className="relative">
-          <div className="animate-spin rounded-full h-32 w-32 border-4 border-slate-300 border-t-violet-500"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-4 border-[#efe7f7] border-t-[#d3aeff]"></div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <Coins className="w-8 h-8 text-violet-500" />
+            <Coins className="w-8 h-8 text-[#d3aeff]" />
           </div>
         </div>
       </div>
     );
   }
 
-  // Show completion message when no more markets
   if (currentIndex < 0) {
     return (
       <div className="flex items-center justify-center h-[70vh]">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center py-16"
+          className="text-center py-16 bg-white rounded-3xl border-4 border-black p-8 mx-4"
         >
           <motion.div
             animate={{
@@ -135,11 +130,13 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
           >
             🎉
           </motion.div>
-          <h2 className="text-2xl font-bold mb-4 text-white">Oh! Great!</h2>
-          <p className="text-slate-400 mb-8">
+          <h2 className="text-2xl font-black mb-4 text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+            Oh! Great!
+          </h2>
+          <p className="text-black/80 mb-8 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
             You have browsed through all the active markets.
           </p>
-          <p className="text-slate-300">
+          <p className="text-black font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
             Check back later for new predictions or create your own market!
           </p>
         </motion.div>
@@ -163,30 +160,30 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
               swipeRequirementType="position"
               swipeThreshold={100}
             >
-              <div className="relative w-full h-full bg-gradient-to-br from-slate-900 via-violet-900 to-indigo-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-700">
-                {/* Modern glass overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/20"></div>
+              <div className="relative w-full h-full bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-black">
+                {/* Orbit-style card background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#efe7f7] via-white to-[#d3aeff]/20"></div>
                 
-                {/* Subtle animated background elements */}
-                <div className="absolute inset-0 overflow-hidden opacity-30">
+                {/* Decorative elements */}
+                <div className="absolute inset-0 overflow-hidden opacity-20">
                   {[...Array(3)].map((_, i) => (
                     <motion.div
                       key={i}
-                      className="absolute rounded-full bg-gradient-to-r from-violet-400/20 to-indigo-400/20"
+                      className="absolute rounded-full bg-gradient-to-r from-[#d3aeff]/30 to-[#99ff88]/30"
                       style={{
-                        width: Math.random() * 150 + 100,
-                        height: Math.random() * 150 + 100,
+                        width: Math.random() * 80 + 40,
+                        height: Math.random() * 80 + 40,
                         left: Math.random() * 100 + '%',
                         top: Math.random() * 100 + '%',
                       }}
                       animate={{
-                        x: [0, Math.random() * 30 - 15],
-                        y: [0, Math.random() * 30 - 15],
+                        x: [0, Math.random() * 20 - 10],
+                        y: [0, Math.random() * 20 - 10],
                         scale: [1, 1.1, 1],
                         opacity: [0.1, 0.3, 0.1],
                       }}
                       transition={{
-                        duration: Math.random() * 8 + 6,
+                        duration: Math.random() * 6 + 4,
                         repeat: Infinity,
                         repeatType: "reverse",
                       }}
@@ -195,79 +192,95 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                 </div>
                 
                 {/* Content */}
-                <div className="relative z-10 h-full flex flex-col p-6 text-white">
+                <div className="relative z-10 h-full flex flex-col p-6 text-black">
                   {/* Header */}
                   <div className="flex justify-between items-start mb-4">
-                    <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl px-4 py-2 border border-slate-600">
-                      <span className="text-sm font-medium text-slate-200">{market.category || 'General'}</span>
+                    <div className="bg-black/80 backdrop-blur-sm rounded-2xl px-4 py-2 border-2 border-black">
+                      <span className="text-sm font-bold text-white" style={{ fontFamily: 'Brice SemiBold, sans-serif' }}>
+                        {market.category || 'General'}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-slate-800/60 backdrop-blur-sm rounded-2xl px-4 py-2 border border-slate-600">
-                      <Clock className="w-4 h-4 text-violet-300" />
-                      <span className="text-sm font-medium text-slate-200">{getTimeRemaining(market.expiresAt)}</span>
+                    <div className="flex items-center gap-2 bg-black/80 backdrop-blur-sm rounded-2xl px-4 py-2 border-2 border-black">
+                      <Clock className="w-4 h-4 text-[#99ff88]" />
+                      <span className="text-sm font-bold text-white" style={{ fontFamily: 'Brice SemiBold, sans-serif' }}>
+                        {getTimeRemaining(market.expiresAt)}
+                      </span>
                     </div>
                   </div>
 
                   {/* Main Question */}
                   <div className="flex-1 flex items-center justify-center text-center px-4">
-                    <h2 className="text-2xl md:text-3xl font-bold leading-tight text-white drop-shadow-lg">
+                    <h2 className="text-2xl md:text-3xl font-black leading-tight text-black drop-shadow-sm" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                       {market.question}
                     </h2>
                   </div>
 
-                  {/* Options with modern design */}
+                  {/* Options with Orbit-style design */}
                   <div className="space-y-3 mb-6">
                     <motion.div 
                       whileHover={{ scale: 1.02 }}
-                      className="bg-emerald-500/20 backdrop-blur-sm rounded-2xl p-4 border border-emerald-400/30"
+                      className="bg-[#99ff88] backdrop-blur-sm rounded-2xl p-4 border-4 border-black shadow-lg"
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center">
-                            <Check className="w-5 h-5 text-white" />
+                          <div className="w-8 h-8 bg-black rounded-xl flex items-center justify-center">
+                            <Check className="w-5 h-5 text-[#99ff88]" />
                           </div>
-                          <span className="font-semibold text-lg text-white">{market.optionA}</span>
+                          <span className="font-black text-lg text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                            {market.optionA}
+                          </span>
                         </div>
-                        <div className="bg-emerald-400/20 rounded-xl px-3 py-1">
-                          <span className="text-emerald-300 font-bold text-sm">{getMarketOdds(market)}%</span>
+                        <div className="bg-black rounded-xl px-3 py-1">
+                          <span className="text-[#99ff88] font-black text-sm" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                            {getMarketOdds(market)}%
+                          </span>
                         </div>
                       </div>
                     </motion.div>
                     
                     <motion.div 
                       whileHover={{ scale: 1.02 }}
-                      className="bg-rose-500/20 backdrop-blur-sm rounded-2xl p-4 border border-rose-400/30"
+                      className="bg-[#ff6961] backdrop-blur-sm rounded-2xl p-4 border-4 border-black shadow-lg"
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-rose-500 rounded-xl flex items-center justify-center">
-                            <X className="w-5 h-5 text-white" />
+                          <div className="w-8 h-8 bg-black rounded-xl flex items-center justify-center">
+                            <X className="w-5 h-5 text-[#ff6961]" />
                           </div>
-                          <span className="font-semibold text-lg text-white">{market.optionB}</span>
+                          <span className="font-black text-lg text-white" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                            {market.optionB}
+                          </span>
                         </div>
-                        <div className="bg-rose-400/20 rounded-xl px-3 py-1">
-                          <span className="text-rose-300 font-bold text-sm">{100 - getMarketOdds(market)}%</span>
+                        <div className="bg-black rounded-xl px-3 py-1">
+                          <span className="text-[#ff6961] font-black text-sm" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                            {100 - getMarketOdds(market)}%
+                          </span>
                         </div>
                       </div>
                     </motion.div>
                   </div>
 
                   {/* Market Stats */}
-                  <div className="flex justify-between items-center bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 border border-slate-600">
+                  <div className="flex justify-between items-center bg-black/80 backdrop-blur-sm rounded-2xl p-4 border-2 border-black">
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-violet-300" />
-                      <span className="text-sm font-medium text-slate-200">Pool: {formatSUI(market.totalPool)} SUI</span>
+                      <TrendingUp className="w-5 h-5 text-[#d3aeff]" />
+                      <span className="text-sm font-bold text-white" style={{ fontFamily: 'Brice SemiBold, sans-serif' }}>
+                        Pool: {formatSUI(market.totalPool)} SUI
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Users className="w-5 h-5 text-indigo-300" />
-                      <span className="text-sm font-medium text-slate-200">Active</span>
+                      <Users className="w-5 h-5 text-[#99ff88]" />
+                      <span className="text-sm font-bold text-white" style={{ fontFamily: 'Brice SemiBold, sans-serif' }}>
+                        Active
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Swipe Indicators */}
+                {/* Swipe Indicators with Orbit styling */}
                 <div className="absolute top-1/2 left-8 transform -translate-y-1/2 opacity-0 pointer-events-none transition-opacity duration-300" id="nope">
                   <motion.div 
-                    className="bg-rose-500 rounded-2xl p-6 shadow-2xl border border-rose-400"
+                    className="bg-[#ff6961] rounded-2xl p-6 shadow-2xl border-4 border-black"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
@@ -276,11 +289,11 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                 </div>
                 <div className="absolute top-1/2 right-8 transform -translate-y-1/2 opacity-0 pointer-events-none transition-opacity duration-300" id="like">
                   <motion.div 
-                    className="bg-emerald-500 rounded-2xl p-6 shadow-2xl border border-emerald-400"
+                    className="bg-[#99ff88] rounded-2xl p-6 shadow-2xl border-4 border-black"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <Check className="w-10 h-10 text-white" />
+                    <Check className="w-10 h-10 text-black" />
                   </motion.div>
                 </div>
               </div>
@@ -297,11 +310,11 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
               exit={{ opacity: 0, scale: 0.5, y: -20 }}
               className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50"
             >
-              <div className={`px-6 py-3 rounded-2xl text-white font-bold text-lg shadow-2xl border ${
+              <div className={`px-6 py-3 rounded-2xl text-white font-black text-lg shadow-2xl border-4 border-black ${
                 lastDirection === 'right' 
-                  ? 'bg-emerald-500 border-emerald-400' 
-                  : 'bg-rose-500 border-rose-400'
-              }`}>
+                  ? 'bg-[#99ff88] text-black' 
+                  : 'bg-[#ff6961] text-white'
+              }`} style={{ fontFamily: 'Brice Black, sans-serif' }}>
                 {lastDirection === 'right' ? '🚀 Ready to Bet!' : '👋 Skipped'}
               </div>
             </motion.div>
@@ -309,7 +322,7 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Betting Modal - Fixed z-index and positioning */}
+      {/* Betting Modal with Orbit styling */}
       <AnimatePresence>
         {showBetModal && selectedMarket && (
           <motion.div
@@ -317,19 +330,23 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
-            style={{ paddingBottom: '120px' }} // Add padding to avoid navigation
+            style={{ paddingBottom: '120px' }}
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 20 }}
-              className="bg-slate-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-700 max-h-[70vh] overflow-y-auto"
+              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border-4 border-black max-h-[70vh] overflow-y-auto"
             >
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">Place Your Bet</h3>
-                <p className="text-slate-300 mb-4 text-sm leading-relaxed">{selectedMarket.question}</p>
-                <div className="bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-2xl p-4 border border-violet-400/30">
-                  <p className="font-semibold text-violet-300">
+                <h3 className="text-2xl font-black text-black mb-2" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                  Place Your Bet
+                </h3>
+                <p className="text-black/80 mb-4 text-sm leading-relaxed font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
+                  {selectedMarket.question}
+                </p>
+                <div className="bg-[#d3aeff] rounded-2xl p-4 border-2 border-black">
+                  <p className="font-black text-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                     Betting on: {selectedOption === 0 ? selectedMarket.optionA : selectedMarket.optionB}
                   </p>
                 </div>
@@ -337,7 +354,7 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
 
               {/* Bet Amount Controls */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                <label className="block text-sm font-black text-black mb-3" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                   Bet Amount (SUI)
                 </label>
                 <div className="flex items-center space-x-4">
@@ -345,7 +362,7 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                     onClick={() => adjustBetAmount(false)}
                     variant="outline"
                     size="sm"
-                    className="rounded-xl w-10 h-10 p-0 border-slate-600 bg-slate-800 hover:bg-slate-700 text-white"
+                    className="rounded-xl w-10 h-10 p-0 border-2 border-black bg-[#efe7f7] hover:bg-[#d3aeff] text-black font-black"
                     disabled={parseFloat(betAmount) <= 0.01}
                   >
                     <Minus className="w-4 h-4" />
@@ -364,7 +381,8 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                       min="0.01"
                       max="100"
                       step="0.01"
-                      className="w-full text-center text-2xl font-bold py-4 bg-slate-800 border border-slate-600 rounded-2xl focus:ring-2 focus:ring-violet-500 focus:border-transparent text-white"
+                      className="w-full text-center text-2xl font-black py-4 bg-[#efe7f7] border-2 border-black rounded-2xl focus:ring-2 focus:ring-[#d3aeff] focus:border-[#d3aeff] text-black"
+                      style={{ fontFamily: 'Brice Black, sans-serif' }}
                     />
                   </div>
                   
@@ -372,7 +390,7 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                     onClick={() => adjustBetAmount(true)}
                     variant="outline"
                     size="sm"
-                    className="rounded-xl w-10 h-10 p-0 border-slate-600 bg-slate-800 hover:bg-slate-700 text-white"
+                    className="rounded-xl w-10 h-10 p-0 border-2 border-black bg-[#efe7f7] hover:bg-[#d3aeff] text-black font-black"
                     disabled={parseFloat(betAmount) >= 100}
                   >
                     <Plus className="w-4 h-4" />
@@ -387,11 +405,12 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                       onClick={() => setBetAmount(amount)}
                       variant={betAmount === amount ? "default" : "outline"}
                       size="sm"
-                      className={`flex-1 rounded-xl ${
+                      className={`flex-1 rounded-xl font-black border-2 border-black ${
                         betAmount === amount 
-                          ? 'bg-gradient-to-r from-violet-500 to-indigo-500 text-white border-violet-400' 
-                          : 'border-slate-600 bg-slate-800 hover:bg-slate-700 text-slate-300'
+                          ? 'bg-[#d3aeff] text-black hover:bg-[#b8a3ff]' 
+                          : 'bg-white hover:bg-[#efe7f7] text-black'
                       }`}
+                      style={{ fontFamily: 'Brice Black, sans-serif' }}
                     >
                       {amount}
                     </Button>
@@ -400,14 +419,16 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
               </div>
 
               {/* Potential Winnings */}
-              <div className="mb-6 bg-emerald-500/10 rounded-2xl p-4 border border-emerald-500/30">
+              <div className="mb-6 bg-[#99ff88] rounded-2xl p-4 border-2 border-black">
                 <div className="flex justify-between items-center">
-                  <span className="text-emerald-300 font-medium">Potential Winnings:</span>
-                  <span className="text-emerald-400 font-bold text-lg">
+                  <span className="text-black font-black" style={{ fontFamily: 'Brice Black, sans-serif' }}>
+                    Potential Winnings:
+                  </span>
+                  <span className="text-black font-black text-lg" style={{ fontFamily: 'Brice Black, sans-serif' }}>
                     ~{(parseFloat(betAmount) * 1.8).toFixed(2)} SUI
                   </span>
                 </div>
-                <p className="text-xs text-emerald-400/70 mt-1">
+                <p className="text-xs text-black/70 mt-1 font-medium" style={{ fontFamily: 'Brice Regular, sans-serif' }}>
                   *Estimate based on current odds
                 </p>
               </div>
@@ -417,13 +438,15 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
                 <Button
                   onClick={() => setShowBetModal(false)}
                   variant="outline"
-                  className="flex-1 py-4 rounded-2xl border-slate-600 bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  className="flex-1 py-4 rounded-2xl border-2 border-black bg-white hover:bg-[#efe7f7] text-black font-black"
+                  style={{ fontFamily: 'Brice Black, sans-serif' }}
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleBetConfirm}
-                  className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-indigo-500 hover:from-violet-600 hover:to-indigo-600 text-white border border-violet-400"
+                  className="flex-1 py-4 rounded-2xl bg-[#99ff88] hover:bg-[#77dd66] text-black border-2 border-black font-black"
+                  style={{ fontFamily: 'Brice Black, sans-serif' }}
                 >
                   Place Bet
                 </Button>
@@ -435,3 +458,5 @@ export const EnhancedTinderSwipe: React.FC<TinderSwipeProps> = ({
     </>
   );
 };
+
+

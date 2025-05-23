@@ -1,0 +1,53 @@
+/* public/fonts/stylesheet.css - Add this to your public/fonts directory */
+
+@font-face {
+  font-family: 'Brice Black';
+  src: url('./brice-black.woff2') format('woff2'),
+       url('./brice-black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fallback system fonts with similar characteristics to Brice */
+.font-brice-light {
+  font-family: 'Brice Light', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-brice-regular {
+  font-family: 'Brice Regular', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-brice-semibold {
+  font-family: 'Brice SemiBold', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-brice-black {
+  font-family: 'Brice Black', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}-face {
+  font-family: 'Brice Light';
+  src: url('./brice-light.woff2') format('woff2'),
+       url('./brice-light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Brice Regular';
+  src: url('./brice-regular.woff2') format('woff2'),
+       url('./brice-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Brice SemiBold';
+  src: url('./brice-semibold.woff2') format('woff2'),
+       url('./brice-semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
