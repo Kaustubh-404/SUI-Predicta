@@ -49,7 +49,7 @@ ORBIT revolutionizes prediction markets by combining **TikTok-style swipe mechan
 
 | Landing Page | Swipe Interface | Market Creation | Profile |
 |--------------|-----------------|-----------------|---------|
-| ![Landing](./public/screenshots/landing.png) | ![Swipe](./public/screenshots/swipe.png) | ![Create](./public/screenshots/create.png) | ![Profile](./public/screenshots/profile.png) |
+| ![Landing](./public/screenshots2/landing.png) | ![Swipe](./public/screenshots2/swipe.png) | ![Create](./public/screenshots2/create.png) | ![Profile](./public/screenshots2/profile.png) |
 
 ## 🔧 Quick Start
 
